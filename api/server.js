@@ -6,7 +6,9 @@ const KnexSessionStore = require('connect-session-knex')(session);
 
 
 const UserRouter = require('../users/user-router.js');
+const AuthRouter = require('../auth/auth-router.js');
 const dbConnection = require('../data/db-config.js');
+const restricted = require('../auth/restricted-middleware.js');
 
 const server = express();
 
@@ -33,6 +35,7 @@ server.use(express.json());
 server.use(cors());
 server.use(session(sessionConfig));
 
-server.use('/api', UserRouter)
+server.use('/api/restricted', restricted, UserRouter);
+server.use('/api', AuthRouter)
 
 module.exports = server;
